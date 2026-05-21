@@ -11,7 +11,7 @@ import java.util.List;
  * 入库单主表 — 候选人需要实现创建功能
  */
 @Entity
-@Table(name = "inbound_orders")
+@Table(name = "inbound_order")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,8 +35,8 @@ public class InboundOrder {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // 候选人在实现时可按需处理明细关联
-    // @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InboundOrderItem> items = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

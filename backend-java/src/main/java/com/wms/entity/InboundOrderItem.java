@@ -7,8 +7,9 @@ import lombok.*;
  * 入库单明细 — 候选人需要实现
  */
 @Entity
-@Table(name = "inbound_order_items")
+@Table(name = "inbound_order_item")
 @Data
+@EqualsAndHashCode(exclude = "order")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,8 +19,9 @@ public class InboundOrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "order_id", nullable = false)
-    private Long orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private InboundOrder order;
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
