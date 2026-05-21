@@ -45,6 +45,12 @@ const onPageChange = (p: number) => {
   loadInventory()
 }
 
+const onSizeChange = (size: number) => {
+  pageSize.value = size
+  page.value = 1
+  loadInventory()
+}
+
 const getRowStyle = ({ row }: { row: InventoryItem }) => {
   if (row.quantity < 10) {
     return { backgroundColor: '#fff0f0', color: '#f56c6c' }
@@ -108,10 +114,12 @@ onMounted(async () => {
     <div style="margin-top: 16px; text-align: right">
       <el-pagination
         v-model:current-page="page"
-        :page-size="pageSize"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 50, 100]"
         :total="total"
-        layout="total, prev, pager, next"
+        layout="total, sizes, prev, pager, next"
         @current-change="onPageChange"
+        @size-change="onSizeChange"
       />
     </div>
 
