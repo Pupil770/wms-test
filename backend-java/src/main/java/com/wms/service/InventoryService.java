@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import com.wms.common.BusinessException;
+import com.wms.common.PageResult;
 import com.wms.dto.InboundItemRequest;
 import com.wms.dto.InboundOrderCreateRequest;
 import com.wms.dto.InboundOrderResponse;
@@ -9,6 +10,8 @@ import com.wms.entity.*;
 import com.wms.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,8 +113,10 @@ public class InventoryService {
                 .build();
     }
 
-    public List<InventoryResponse> queryInventory(String keyword, Long warehouseId,
-                                                   int page, int pageSize) {
-        throw new UnsupportedOperationException("请实现库存查询功能（任务2）");
+    public PageResult<InventoryResponse> queryInventory(String keyword, Long warehouseId,
+                                                    int page, int pageSize) {
+        Page<InventoryResponse> pageData = inventoryRepository.findInventoryPage(
+                keyword, warehouseId, PageRequest.of(page - 1, pageSize));
+        return new PageResult<>(pageData.getContent(), pageData.getTotalElements(), page, pageSize);
     }
 }
