@@ -115,6 +115,8 @@ public class InventoryService {
 
     public PageResult<InventoryResponse> queryInventory(String keyword, Long warehouseId,
                                                     int page, int pageSize) {
+        page = Math.max(page, 1);
+        pageSize = Math.min(Math.max(pageSize, 1), 100);
         Page<InventoryResponse> pageData = inventoryRepository.findInventoryPage(
                 keyword, warehouseId, PageRequest.of(page - 1, pageSize));
         return new PageResult<>(pageData.getContent(), pageData.getTotalElements(), page, pageSize);
