@@ -16,6 +16,8 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     Optional<Inventory> findByProductIdAndLocationCode(Long productId, String locationCode);
 
+    boolean existsByProductId(Long productId);
+
     @Query("SELECT new com.wms.dto.InventoryResponse(" +
            "i.productId, p.name, p.sku, i.locationCode, w.name, i.quantity, i.updatedAt) " +
            "FROM Inventory i " +
