@@ -81,8 +81,51 @@ export interface InboundItemRequest {
   locationCode: string
 }
 
+export interface InboundOrderResponse {
+  id: number
+  orderNo: string
+  supplierName: string
+  status: string
+  createdAt: string
+  items: Array<{
+    productId: number
+    productName: string
+    quantity: number
+    locationCode: string
+  }>
+}
+
 export const createInboundOrder = (data: {
   supplierName: string
   items: InboundItemRequest[]
 }) =>
-  api.post('/inbound-orders', data)
+  api.post<any, { code: number; message: string; data: InboundOrderResponse }>('/inbound-orders', data)
+
+
+// ============ 出库单 ============
+
+export interface OutboundItemRequest {
+  productId: number
+  quantity: number
+  locationCode: string
+}
+
+export interface OutboundOrderResponse {
+  id: number
+  orderNo: string
+  customerName: string
+  status: string
+  createdAt: string
+  items: Array<{
+    productId: number
+    productName: string
+    quantity: number
+    locationCode: string
+  }>
+}
+
+export const createOutboundOrder = (data: {
+  customerName: string
+  items: OutboundItemRequest[]
+}) =>
+  api.post<any, { code: number; message: string; data: OutboundOrderResponse }>('/outbound-orders', data)

@@ -5,6 +5,7 @@ import com.wms.entity.Inventory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,4 +31,12 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
             @Param("keyword") String keyword,
             @Param("warehouseId") Long warehouseId,
             Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE Inventory i SET i.quantity = i.quantity - :qty, i.updatedAt = CURRENT_TIMESTAMP "
+         + "WHERE i.productId = :productId AND i.locationCode = :locationCode "
+         + "AND i.quantity >= :qty")
+    int deductStock(@Param("productId") Long productId,
+                    @Param("locationCode") String locationCode,
+                    @Param("qty") int qty);
 }
